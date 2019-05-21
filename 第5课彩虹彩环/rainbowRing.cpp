@@ -3,8 +3,9 @@
 #include <fstream>
 using namespace cv;
 using namespace std;
-
+#define WINDOW "vertical concat image"
 int main() {
+
 	std::vector<Scalar> color;
 	color.push_back(Scalar(255, 0, 0));
 	color.push_back(Scalar(0, 255, 0));
@@ -20,36 +21,37 @@ int main() {
 	Mat v4(15 * scale, 100 * scale, CV_8UC3, color[4]);
 	Mat v5(15 * scale, 100 * scale, CV_8UC3, color[5]);
 
-	Mat v, h;
+	Mat v, image;
 
 //hconcat(v0,v1,v1);//水平拼接
 //vconcat
-	vconcat(v0, v1, h);
-	vconcat(h, v2, h);
-	vconcat(h, v3, h);
-	vconcat(h, v4, h);
-	vconcat(h, v5, h);
+	vconcat(v0, v1, image);
+	vconcat(image, v2, image);
+	vconcat(image, v3, image);
+	vconcat(image, v4, image);
+	vconcat(image, v5, image);
 
 	//hconcat(v0, v1, h);
-	int he = h.size().height/2;
-	int wi = h.size().width/2;
-	int r =( he>wi? wi:he);
-	r = r-scale;
-	circle(h, Point(wi,he),  r,Scalar(255,255,255),100,-1);
-	r = r*2/3;
-	circle(h, Point(wi,he),  r,Scalar(255,255,255),-1,LINE_AA);
-	imshow("hc", h);
+	int height = image.size().height/2;
+	int width = image.size().width/2;
+	int radius =( height>width? width:height);
+	radius = radius-scale;
+	circle(image, Point(width,height),  radius,Scalar(255,255,255),100,-1);
+	radius = radius*2/3;
+	circle(image, Point(width,height),  radius,Scalar(255,255,255),-1,LINE_AA);
+	namedWindow(WINDOW, WINDOW_NORMAL);
+	imshow(WINDOW, image);
 	cv::waitKeyEx(0);
 	/*
-	 * 
-	 * 
+	 *
+	 *
 	 * 		double dist = cv::pointPolygonTest(*itc, cv::Point2f(rt,rk), true);
 					ROS_INFO("dist %f",dist);
 					if( dist >= BOX_PCL_TH)
 					{
 						int index = rk*cloud.width + rt;
 						if (index < cloud.points.size())
-							boxcloud.points.push_back(cloud.points[index]);	
+							boxcloud.points.push_back(cloud.points[index]);
 					}
 	 * */
 	return 0;
